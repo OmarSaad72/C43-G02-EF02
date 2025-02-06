@@ -12,22 +12,22 @@ namespace Demo.Data.Models
     internal class Employee
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)] //(1,1) 
+        //[DatabaseGenerated(DatabaseGeneratedOption.Identity)] //(1,1) 
         public int Code { get; set; }
         /************************************************************/
-        [Column(TypeName = "varchar")]
+        //[Column(TypeName = "varchar")]
         //[StringLength(50/*Max*/, MinimumLength = 30)]
         //[MinLength(50)]
         //[MaxLength(50)]
-        [Length(10, 50)] //Min , Max
+        //[Length(10, 50)] //Min , Max
         public string? Name { get; set; }
         /************************************************************/
         [Column(TypeName = "decimal(12,2)")]
         public double Salary { get; set; }
         /************************************************************/
         [Range(18, 50)]
-        [AllowedValues(20,22,32)]
-        [DeniedValues(10,17)]
+        //[AllowedValues(20,22,32)]
+        //[DeniedValues(10,17)]
         public int? Age { get; set; }
         /************************************************************/
         [EmailAddress]

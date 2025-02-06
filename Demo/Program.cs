@@ -10,6 +10,9 @@
             #region Data Anotation
 
             #endregion
+            #region Fluent APIs
+
+            #endregion
         }
     }
 }
