@@ -20,7 +20,7 @@ namespace Demo.Data.Models
         //[MinLength(50)]
         //[MaxLength(50)]
         //[Length(10, 50)] //Min , Max
-        public string? Name { get; set; }
+        public string Name { get; set; }
         /************************************************************/
         [Column(TypeName = "decimal(12,2)")]
         public double Salary { get; set; }
@@ -28,16 +28,16 @@ namespace Demo.Data.Models
         [Range(18, 50)]
         //[AllowedValues(20,22,32)]
         //[DeniedValues(10,17)]
-        public int? Age { get; set; }
+        public int Age { get; set; }
         /************************************************************/
         [EmailAddress]
-        public string? EmailAddress { get; set; }
+        public string EmailAddress { get; set; }
         /************************************************************/
         [Phone]
         public string? Phone { get; set; }
         /************************************************************/
         [DataType(DataType.Password)]
-        public string? Password { get; set; }
+        public string Password { get; set; }
 
     }
 }
