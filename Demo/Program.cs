@@ -1,5 +1,4 @@
-﻿using Demo.Data;
-using Demo.Data.Models;
+﻿using Demo.Data.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Demo
@@ -39,6 +38,7 @@ namespace Demo
             #region Create
             Employee Emp1 = new Employee() //Poco Class
             {
+                //Code = 2, // Invalid ==> It's Auto identify
                 Name = "Omar",
                 Age = 21,
                 Salary = 20000,
@@ -48,6 +48,7 @@ namespace Demo
             };
             Employee Emp2 = new Employee()
             {
+                //Code = 2, // Invalid ==> It's Auto identify
                 Name = "Mai",
                 Age = 21,
                 Salary = 20000,
@@ -93,20 +94,24 @@ namespace Demo
             //Console.WriteLine(dbContext.Entry(Employee).State);
             #endregion
             #region Delete
-            var Employee = (from e in dbContext.Employees
-                            where e.Code == 2
-                            select e).FirstOrDefault();
-            dbContext.Employees.Remove(Employee);
-            Console.WriteLine("After Deletion");
-            Console.WriteLine(dbContext.Entry(Employee).State);
-            dbContext.SaveChanges();
-            Console.WriteLine("After SaveChanges");  
-            Console.WriteLine(dbContext.Entry(Employee).State);
             //dbContext.Employees.Remove(Employee); //Way01 ==> It's Better Way
             //dbContext.Remove(Employee); //Way02 ==> Not Readable
             //dbContext.Set<Employee>().Remove(Employee); //Way03 ==> If havn't DbSet<Employee>
             //dbContext.Entry(Employee).State = EntityState.Deleted; //Way04
+
+            //var Employee = (from e in dbContext.Employees
+            //                where e.Code == 2
+            //                select e).FirstOrDefault();
+            //dbContext.Employees.Remove(Employee);
+            //Console.WriteLine("After Deletion");
+            //Console.WriteLine(dbContext.Entry(Employee).State);
+            //dbContext.SaveChanges();
+            //Console.WriteLine("After SaveChanges");  
+            //Console.WriteLine(dbContext.Entry(Employee).State);
             #endregion
+            #endregion
+            #region OneToMany Relationship
+
             #endregion
         }
     }

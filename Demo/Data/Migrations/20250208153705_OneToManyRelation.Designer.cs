@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Demo.Data.Migrations
 {
     [DbContext(typeof(CompanyDBContext))]
-    [Migration("20250206001002_FluentApisProgress")]
-    partial class FluentApisProgress
+    [Migration("20250208153705_OneToManyRelation")]
+    partial class OneToManyRelation
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,6 +25,26 @@ namespace Demo.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Demo.Data.Models.Department", b =>
+                {
+                    b.Property<int>("DeptId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DeptId"));
+
+                    b.Property<DateTime>("DateOfCreation")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeptName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("DeptId");
+
+                    b.ToTable("Departments");
+                });
+
             modelBuilder.Entity("Demo.Data.Models.Employee", b =>
                 {
                     b.Property<int>("Code")
@@ -34,17 +54,27 @@ namespace Demo.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Code"), 10L, 10);
 
-                    b.Property<int?>("Age")
+                    b.Property<string>("Address")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar");
+
+                    b.Property<int>("Age")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("DeptId")
                         .HasColumnType("int");
 
                     b.Property<string>("EmailAddress")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("varchar(255)")
                         .HasColumnName("EmpName");
 
                     b.Property<string>("Password")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Phone")
@@ -55,7 +85,23 @@ namespace Demo.Data.Migrations
 
                     b.HasKey("Code");
 
+                    b.HasIndex("DeptId");
+
                     b.ToTable("Employees");
+                });
+
+            modelBuilder.Entity("Demo.Data.Models.Employee", b =>
+                {
+                    b.HasOne("Demo.Data.Models.Department", "Department")
+                        .WithMany("Employees")
+                        .HasForeignKey("DeptId");
+
+                    b.Navigation("Department");
+                });
+
+            modelBuilder.Entity("Demo.Data.Models.Department", b =>
+                {
+                    b.Navigation("Employees");
                 });
 #pragma warning restore 612, 618
         }

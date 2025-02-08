@@ -22,6 +22,10 @@ namespace Demo.Data.Models
         //[Length(10, 50)] //Min , Max
         public string Name { get; set; }
         /************************************************************/
+        [Column(TypeName = "nvarchar")]
+        [MaxLength(200)]
+        public string? Address { get; set; }
+        /************************************************************/
         [Column(TypeName = "decimal(12,2)")]
         public double Salary { get; set; }
         /************************************************************/
@@ -39,5 +43,9 @@ namespace Demo.Data.Models
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
+        /******************************Department Relation******************************/
+        [ForeignKey("Department")]
+        public int? DeptId { get; set; }
+        public Department Department { get; set; } //Navigational Property ==> One Side
     }
 }
