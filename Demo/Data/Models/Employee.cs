@@ -43,9 +43,16 @@ namespace Demo.Data.Models
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
-        /******************************Department Relation******************************/
-        [ForeignKey("Department")]
-        public int? DeptId { get; set; }
+        /******************************Department Relation (Work 1: M)******************************/
+        [InverseProperty(nameof(Models.Department.Employees))]
         public Department Department { get; set; } //Navigational Property ==> One Side
+        [ForeignKey(nameof(Employee.Department))]
+        public int? DeptId { get; set; }
+        /******************************Department Relation (Manage 1: 1)******************************/
+        [InverseProperty(nameof(Models.Department.Manager))]
+        public Department? DepartmentManage { get; set; }
+        [ForeignKey(nameof(DepartmentManage))]
+        public int? DeptManageId { get; set; }
+
     }
 }
