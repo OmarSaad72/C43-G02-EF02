@@ -24,8 +24,7 @@ namespace Assignment.Models.ConfigurationModels
                 .HasMaxLength(15);
             builder
             .Property(n => n.Duration)
-                .IsRequired()
-                .HasComputedColumnSql("GETDATE()");
+                .IsRequired();
         }
     }
 }

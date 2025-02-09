@@ -12,20 +12,36 @@ namespace Assignment.Models
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server =.;Database= RouteAcademy; Trusted_Connection= true; trustservercertificate= true");
+            optionsBuilder.UseSqlServer("Server =.;Database= Route; Trusted_Connection= true; trustservercertificate= true");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+            #region M : M
+            #region Std_Course
+            //modelBuilder.Entity<Std_Course>()
+            //    .HasKey(k => new
+            //    {
+            //        k.StudId,
+            //        k.CourseId
+            //    });
+            #endregion
+            #region Course_Inst
+            //modelBuilder.Entity<Course_Inst>()
+            //   .HasKey(k => new
+            //   {
+            //       k.Cousre_Id,
+            //       k.Inst_Id
+            //   });
+            #endregion
+            #endregion
         }
 
-        public DbSet<Student> Students { get; set; }
-        public DbSet<Course> Courses { get; set; }
-        public DbSet<Instructor> Instructors { get; set; }
-        public DbSet<Department> Departments { get; set; }
-        public DbSet<Topic> Topics { get; set; }
-        public DbSet<Course_Inst> course_Insts { get; set; }
-        public DbSet<Std_Course> std_Courses { get; set; }
+        public DbSet<Student> Student { get; set; }
+        public DbSet<Course> Course { get; set; }
+        public DbSet<Instructor> Instructor { get; set; }
+        public DbSet<Department> Department { get; set; }
+        public DbSet<Topic> Topic { get; set; }
     }
 }

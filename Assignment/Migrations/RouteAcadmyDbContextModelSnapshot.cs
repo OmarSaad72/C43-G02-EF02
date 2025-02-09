@@ -34,10 +34,9 @@ namespace Assignment.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Duration")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("int")
-                        .HasComputedColumnSql("GETDATE()");
+                    b.Property<string>("Duration")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -49,23 +48,25 @@ namespace Assignment.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Courses");
+                    b.ToTable("Course");
                 });
 
             modelBuilder.Entity("Assignment.Models.Course_Inst", b =>
                 {
-                    b.Property<int>("Inst_Id")
+                    b.Property<int>("Cousre_Id")
                         .HasColumnType("int");
 
-                    b.Property<int>("Cousre_Id")
+                    b.Property<int>("Inst_Id")
                         .HasColumnType("int");
 
                     b.Property<double>("Evaluate")
                         .HasColumnType("float");
 
-                    b.HasKey("Inst_Id", "Cousre_Id");
+                    b.HasKey("Cousre_Id", "Inst_Id");
 
-                    b.ToTable("course_Insts");
+                    b.HasIndex("Inst_Id");
+
+                    b.ToTable("Course_Inst");
                 });
 
             modelBuilder.Entity("Assignment.Models.Department", b =>
@@ -91,7 +92,7 @@ namespace Assignment.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Departments");
+                    b.ToTable("Department");
                 });
 
             modelBuilder.Entity("Assignment.Models.Instructor", b =>
@@ -110,7 +111,7 @@ namespace Assignment.Migrations
                     b.Property<double>("Bonus")
                         .HasColumnType("float");
 
-                    b.Property<int>("DeptId")
+                    b.Property<int?>("DeptId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("HourRate")
@@ -126,16 +127,15 @@ namespace Assignment.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Instructors");
+                    b.HasIndex("DeptId");
+
+                    b.ToTable("Instructor");
                 });
 
             modelBuilder.Entity("Assignment.Models.Std_Course", b =>
                 {
                     b.Property<int>("StudId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StudId"));
 
                     b.Property<int>("CourseId")
                         .HasColumnType("int");
@@ -143,11 +143,11 @@ namespace Assignment.Migrations
                     b.Property<double>("Grade")
                         .HasColumnType("float");
 
-                    b.HasKey("StudId");
+                    b.HasKey("StudId", "CourseId");
 
-                    b.HasAlternateKey("StudId", "CourseId");
+                    b.HasIndex("CourseId");
 
-                    b.ToTable("std_Courses");
+                    b.ToTable("Std_Course");
                 });
 
             modelBuilder.Entity("Assignment.Models.Student", b =>
@@ -156,31 +156,31 @@ namespace Assignment.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 10L, 10);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Address")
                         .IsRequired()
-                        .HasColumnType("nvarchar");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Age")
                         .HasColumnType("int");
 
-                    b.Property<int>("DeptId")
+                    b.Property<int?>("DeptId")
                         .HasColumnType("int");
 
                     b.Property<string>("FName")
                         .IsRequired()
-                        .HasMaxLength(15)
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LName")
                         .IsRequired()
-                        .HasMaxLength(15)
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Students");
+                    b.HasIndex("DeptId");
+
+                    b.ToTable("Student");
                 });
 
             modelBuilder.Entity("Assignment.Models.Topic", b =>
@@ -191,6 +191,9 @@ namespace Assignment.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("CourseId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(25)
@@ -198,7 +201,96 @@ namespace Assignment.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Topics");
+                    b.HasIndex("CourseId");
+
+                    b.ToTable("Topic");
+                });
+
+            modelBuilder.Entity("Assignment.Models.Course_Inst", b =>
+                {
+                    b.HasOne("Assignment.Models.Course", "Course")
+                        .WithMany("Course_Inst")
+                        .HasForeignKey("Cousre_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Assignment.Models.Instructor", "Instructor")
+                        .WithMany("Courses")
+                        .HasForeignKey("Inst_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+
+                    b.Navigation("Instructor");
+                });
+
+            modelBuilder.Entity("Assignment.Models.Instructor", b =>
+                {
+                    b.HasOne("Assignment.Models.Department", "Department")
+                        .WithMany("Instructors")
+                        .HasForeignKey("DeptId");
+
+                    b.Navigation("Department");
+                });
+
+            modelBuilder.Entity("Assignment.Models.Std_Course", b =>
+                {
+                    b.HasOne("Assignment.Models.Course", "Course")
+                        .WithMany("Courses")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Assignment.Models.Student", "Student")
+                        .WithMany("std_Courses")
+                        .HasForeignKey("StudId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+
+                    b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("Assignment.Models.Student", b =>
+                {
+                    b.HasOne("Assignment.Models.Department", "Department")
+                        .WithMany()
+                        .HasForeignKey("DeptId");
+
+                    b.Navigation("Department");
+                });
+
+            modelBuilder.Entity("Assignment.Models.Topic", b =>
+                {
+                    b.HasOne("Assignment.Models.Course", null)
+                        .WithMany("Topic")
+                        .HasForeignKey("CourseId");
+                });
+
+            modelBuilder.Entity("Assignment.Models.Course", b =>
+                {
+                    b.Navigation("Course_Inst");
+
+                    b.Navigation("Courses");
+
+                    b.Navigation("Topic");
+                });
+
+            modelBuilder.Entity("Assignment.Models.Department", b =>
+                {
+                    b.Navigation("Instructors");
+                });
+
+            modelBuilder.Entity("Assignment.Models.Instructor", b =>
+                {
+                    b.Navigation("Courses");
+                });
+
+            modelBuilder.Entity("Assignment.Models.Student", b =>
+                {
+                    b.Navigation("std_Courses");
                 });
 #pragma warning restore 612, 618
         }
