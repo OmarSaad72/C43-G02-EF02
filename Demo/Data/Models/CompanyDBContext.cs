@@ -17,6 +17,8 @@ namespace Demo.Data.Models
         }
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Department> Departments { get; set; }
+        public DbSet<Student> Students { get; set; }
+        public DbSet<Course> Courses { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             #region DepartmentConfigurationRelation
@@ -60,7 +62,7 @@ namespace Demo.Data.Models
             //});
             #endregion
 
-            modelBuilder.ApplyConfiguration(new EmployeeConfigurations());
+            //modelBuilder.ApplyConfiguration(new EmployeeConfigurations());
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly()); // Aplly All Congiguration Classes
         }
     }
